@@ -13,29 +13,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the repository code.
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      # Step 2: Set up Python environment.
       - name: Set up Python
         uses: actions/setup-python@v2
         with:
-          python-version: '3.10'  # Use the required Python version
+          python-version: '3.10'
 
-      # Step 3: Install dependencies from requirements.txt.
+      - name: Cache Python packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      # Step 4: Run the scraping script.
       - name: Run scraping script
         env:
           PG_HOST: ${{ secrets.PG_HOST }}
           PG_DBNAME: ${{ secrets.PG_DBNAME }}
           PG_USER: ${{ secrets.PG_USER }}
           PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
-          PG_PORT: ${{ secrets.PG_PORT }}  # Ensure PG_PORT is set in GitHub Secrets
+          PG_PORT: ${{ secrets.PG_PORT }}
         run: |
-          python3 main.py
+          python main.py
