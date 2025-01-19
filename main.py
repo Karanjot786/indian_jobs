@@ -88,7 +88,8 @@ conn = psycopg2.connect(
     dbname=PG_DBNAME,
     user=PG_USER,
     password=PG_PASSWORD,
-    port=PG_PORT
+    port=PG_PORT,
+    sslmode='require'
 )
 conn.autocommit = True  # Enable auto commit for DDL statements
 cursor = conn.cursor()

@@ -1,11 +1,8 @@
 name: Run Scraping Script
 
-# Schedule the workflow to run at a specific time using cron syntax.
-# Here, it is set to run daily at midnight UTC.
 on:
   schedule:
     - cron: '0 0 * * *'
-  # Also allow manual triggering of the workflow.
   workflow_dispatch:
 
 jobs:
@@ -41,5 +38,6 @@ jobs:
           PG_USER: ${{ secrets.PG_USER }}
           PG_PASSWORD: ${{ secrets.PG_PASSWORD }}
           PG_PORT: ${{ secrets.PG_PORT }}
+          PYTHONHTTPSVERIFY: 0
         run: |
           python main.py
